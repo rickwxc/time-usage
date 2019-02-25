@@ -1,7 +1,11 @@
 const initDays = [
-  { date: '2019-01-03' },
-  { date: '2019-01-02' },
-  { date: '2019-01-01' },
+  { date: '2019-01-03', type: 'working' },
+  { date: '2019-01-02', type: 'working' },
+  { date: '2019-01-01', type: 'holiday' },
+]
+
+const activities = [
+
 ]
 
 const initialState = {

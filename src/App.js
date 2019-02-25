@@ -35,8 +35,7 @@ function mapStateToProps(state) {
   }
 }
 
-const mapDispatchToProps = { fetch_days_started }//allow 
-
+const mapDispatchToProps = { fetch_days_started }
 
 export default connect(
   mapStateToProps, 
