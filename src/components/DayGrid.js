@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
+
+import { Button } from 'semantic-ui-react'
 import Day from './Day';
+import UsageForm from './UsageForm';
+
 
 //const DayGrid = (props) => {
 class DayGrid extends Component { 
@@ -9,8 +13,20 @@ class DayGrid extends Component {
 
     return (
       <div>
-        <button type="submit" onClick={this.props.OnFetchDays}
-        > Save </button>
+      <br />
+      <br />
+      <br />
+      <br />
+      <UsageForm
+			OnUsageFormSubmit={this.props.OnUsageFormSubmit}
+      />
+      <br />
+      <br />
+      <br />
+      <br />
+
+
+        <Button onClick={this.props.OnFetchDays}>Load</Button>
 
         {days.map(day => (
           <div key={day.date}>
