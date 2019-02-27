@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-//import Header from './components/layouts/header';
-//import Footer from './components/layouts/footer';
 import Admin from './admin/Admin';
-import DayGrid from './components/DayGrid';
+import UsageForm from './components/UsageForm';
 import { connect } from 'react-redux'
-import fetch_days_started, { newActivity, loadActivities, updateEntity, deleteActivity } from './actions';
+import { 
+  loadEntities, 
+  newEntity, 
+  deleteEntity,
+  updateEntity 
+} from './actions';
 import { Container, Grid } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 import "react-datepicker/dist/react-datepicker.css";
@@ -25,20 +28,20 @@ class App extends Component {
         <Container>
         <Grid columns={1} stackable>
           <Grid.Column>
-            <DayGrid 
-              days={this.props.days} 
-              OnFetchDays={this.props.fetch_days_started}
-              OnUsageFormSubmit={this.props.fetch_days_started}
-            />
+          <UsageForm
+          OnUsageFormSubmit={this.props.OnUsageFormSubmit}
+          />
           </Grid.Column>
           <Grid.Column>
             <Admin 
             activities={this.props.activities} 
-            newActivity={this.props.newActivity}
-            loadActivities={this.props.loadActivities}
-            deleteActivity={this.props.deleteActivity}
+            skills={this.props.skills} 
+
+            loadEntities={this.props.loadEntities}
+            newEntity={this.props.newEntity}
+            deleteEntity={this.props.deleteEntity}
             updateEntity={this.props.updateEntity}
-            isLoading={this.props.isLoading}
+
             />
             <br /> <br /> <br /> <br />
             <br /> <br /> <br /> <br />
@@ -59,16 +62,15 @@ function mapStateToProps(state) {
   return {
     days: state.days,
     activities: state.activities,
-    isLoading: state.isLoading 
+    skills: state.skills
   }
 }
 
 const mapDispatchToProps = {
-  fetch_days_started,
-  newActivity,
-  deleteActivity,
+  newEntity,
   updateEntity,
-  loadActivities,
+  deleteEntity,
+  loadEntities
 }
 
 export default connect(

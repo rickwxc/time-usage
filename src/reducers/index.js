@@ -1,48 +1,51 @@
-const initDays = [
-  { date: '2019-01-03', type: 'working' },
-  { date: '2019-01-02', type: 'working' },
-  { date: '2019-01-01', type: 'holiday' },
-]
-
 const initialState = {
-  days: initDays,
   activities: {},
-  isLoading: false
+  skills: {}
 };
 
-export default function days(state = initialState, action) { 
-  if (action.type === 'FETCH_DAYS_STARTED') { 
-    return { ...state, isLoading: true } 
-  }
+export default function resources(state = initialState, action) { 
 
-  if (action.type === 'LOAD_ACTIVITY_SUCCESS') { 
+  if (action.type.match(/RESOURCE_LOAD_SUCCESS/i)
+      && action.type === (action.payload.resource.toUpperCase() + '_RESOURCE_LOAD_SUCCESS')) { 
     return {
       ...state,
-      activities: action.payload,
-      isLoading: false 
+      [action.payload.resource]: action.payload.list
     }
   }
 
-  if (action.type === 'DELETE_ACTIVITY_SUCCESS') { 
-
-    const newlist = {...state.activities}
-    delete newlist[action.payload]
+  if (action.type.match(/DELETE_SUCCEED/i) && action.type === (action.payload.resource.toUpperCase() + '_DELETE_SUCCEED')) { 
+    let resource = action.payload.resource
+    const newlist = {...state[resource]}
+    delete newlist[action.payload.key]
     return {
       ...state,
-      activities: newlist,
-      isLoading: false 
+      [resource]: newlist
     }
   }
 
-  if (action.type === 'SAVE_NEW_ACTIVITY_SUCCESS') { 
+  if (action.type.match(/NEW_SUCCEED/i) && action.type === (action.payload.resource.toUpperCase() + '_NEW_SUCCEED')) { 
+    let resource = action.payload.resource
+
     return {
       ...state,
-      activities: {
-      ...state.activities,
-      ...action.payload
-      },
-      isLoading: false 
-    };
+      [resource]: {
+        ...state[resource],
+        ...action.payload.entity
+      }
+    }
   }
+
+  if (action.type.match(/UPDATE_SUCCEED/i) && action.type === (action.payload.resource.toUpperCase() + '_UPDATE_SUCCEED')) { 
+    let resource = action.payload.resource
+    let kv = { [action.payload.key]: action.payload.entity }
+    return {
+      ...state,
+      [resource]: {
+        ...state[resource],
+        ...kv
+      }
+    }
+  }
+
   return state;
 }

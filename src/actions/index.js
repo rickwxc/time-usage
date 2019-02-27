@@ -1,75 +1,69 @@
 import * as api from '../api';
 
-export default function fetch_days_started() { 
-  return { 
-    type: 'FETCH_DAYS_STARTED' 
-  }; 
-}
-
-export function loadActivities() {
+export function loadEntities(resource) {
   return dispatch => {
-    //TODO show loading
-    return api.loadActivities().then(resp => { 
-      dispatch(loadActivitySucceeded(resp.data)); 
+    return api.loadResource(resource).then(resp => { 
+      return dispatch(loadResourceSucceed(resource, resp.data)); 
     }); 
   };
 }
 
-
-export function showError(message) { 
+export function loadResourceSucceed(resource, list) { 
   return { 
-    type: 'GET_ERROR',
-    payload: message
+    type: resource.toUpperCase() + '_RESOURCE_LOAD_SUCCESS',
+    payload: {
+      resource:resource, 
+      list: list
+    }
   }; 
 }
 
-export function loadActivitySucceeded(activities) { 
-  return { 
-    type: 'LOAD_ACTIVITY_SUCCESS',
-    payload: activities
+export function updateEntitySucceed(resource, key, entity) { 
+  return {
+    type: resource.toUpperCase() + '_UPDATE_SUCCEED',
+    payload: {
+      resource: resource, 
+      entity: entity, 
+      key: key
+    }
   }; 
 }
 
-export function deleteActivitySucceeded(activityKey) { 
+
+export function deleteEntitySucceed(resource, key) { 
   return { 
-    type: 'DELETE_ACTIVITY_SUCCESS',
-    payload: activityKey
+    type: resource.toUpperCase() + '_DELETE_SUCCEED',
+    payload: {
+      resource:resource, 
+      key: key
+    }
   }; 
 }
 
-export function saveActivitySucceeded(activity) { 
+export function createEntitySucceed(resource, entity) { 
   return { 
-    type: 'SAVE_NEW_ACTIVITY_SUCCESS',
-    payload: activity
+    type: resource.toUpperCase() + '_NEW_SUCCEED',
+    payload: {
+      resource:resource, 
+      entity: entity
+    }
   }; 
 }
 
 export function updateEntity(resource, uuid, params) { 
   return dispatch => {
     return api.updateEntity(resource, uuid, params)
-  }
-}
-
-export function deleteEntity(resource, uuid) { 
-  return dispatch => {
-    return api.deleteEntity(resource, uuid)
-  }
-}
-
-export function deleteActivity(key) { 
-  return dispatch => {
-    return api.deleteEntity('activities', key)
-    .then(deletedKey => {
-      dispatch(deleteActivitySucceeded(deletedKey))
+    .then(resp => {
+      return dispatch(updateEntitySucceed(resp.resource, resp.key, resp.entity))
     })
   }
 }
 
-export function newActivity(params) { 
+export function deleteEntity(resource, key) { 
   return dispatch => {
-    return api.newEntity('activities', params)
-    .then(newActivityObj => {
-      dispatch(saveActivitySucceeded(newActivityObj))
+    return api.deleteEntity(resource, key)
+    .then(deletedKey => {
+      return dispatch(deleteEntitySucceed(resource, deletedKey))
     })
   }
 }
@@ -77,5 +71,8 @@ export function newActivity(params) {
 export function newEntity(resource, params) { 
   return dispatch => {
     return api.newEntity(resource, params)
+    .then(newObj => {
+      return dispatch(createEntitySucceed(resource, newObj))
+    })
   }
 }

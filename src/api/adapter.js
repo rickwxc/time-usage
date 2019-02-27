@@ -17,7 +17,6 @@ export function newEntity(resource, params){
   return new Promise((resolve, reject) => { 
     try{
       const newKey = firebase.database().ref(resource).push(params)
-      //const newKey = firebase.database().ref(resource).push({'..xx':''})
       resolve(newKey.key)
     }catch(err){
       reject(new Error('Create records failed.[code: 500]'))
@@ -25,15 +24,19 @@ export function newEntity(resource, params){
   })
 }
 
-export function updateEntity(resource, uuid, params) {
+export function updateEntity(resource, key, params) {
   return new Promise((resolve, reject) => {
     try{
-      firebase.database().ref(resource).child(uuid).update(params)
+      firebase.database().ref(resource).child(key).update(params)
     }catch(err){
       reject(new Error('Update failed.[code: 500]'))
       return
     }
-    resolve(true)
+    resolve({
+      resource: resource, 
+      key: key, 
+      entity: params
+    })
   })
 }
 
@@ -49,10 +52,15 @@ export function deleteEntity(resource, key) {
   })
 }
 
-export function loadActivities() {
+export function loadResource(resource) {
   return new Promise((resolve, reject) => { 
-    firebase.database().ref('activities').on("value", function(snapshot) {
-      resolve({ data: snapshot.val() || [] })
-    })
+    try{
+      firebase.database().ref(resource).on("value", function(snapshot) {
+        resolve({ data: snapshot.val() || {} })
+      })
+    }catch(err){
+      reject(new Error('Loading failed.[code: 500]'))
+      return
+    }
   })
 }
