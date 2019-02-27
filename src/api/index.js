@@ -1,22 +1,18 @@
-const activities = [
-  { key: 'coding',  text: 'Coding', state: {showSkills: true} },
-  { key: 'reading', text: 'Reading', state: { showSkills: true} },
-  { key: 'sport',  text: 'Sport', state: { showSkills: false} },
-  { key: 'relax',  text: 'Relax', state: { showSkills: false} },
-]
+import * as ApiAdapter from './adapter'
 
 export function loadActivities() {
-  return new Promise((resolve, reject) => { 
-    setTimeout(() => {
-      resolve({ data:activities })
-    }, 2000)
-  })
+  return ApiAdapter.loadActivities()
+}
+export function deleteEntity(resource, uuid) {
+  return ApiAdapter.deleteEntity(resource, uuid)
 }
 
-export function createActivity(params) {
-  return new Promise((resolve, reject) => { 
-    setTimeout(()=>{
-      resolve({data:{date: '123', type: '123'}})
-    }, 1000)
+export function updateEntity(resource, uuid, params) {
+  return ApiAdapter.updateEntity(resource, uuid, params)
+}
+
+export function newEntity(resource, params) {
+  return ApiAdapter.newEntity(resource, params).then((newEntityKey) => {
+    return ApiAdapter.getEntityByKey(resource, newEntityKey)
   })
 }

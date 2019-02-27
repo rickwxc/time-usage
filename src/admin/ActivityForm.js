@@ -1,15 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Divider, Message } from 'semantic-ui-react'
-
-
-
-    /*
-const options = [
-  { key: 'm', text: 'Male', value: 'male' },
-  { key: 'f', text: 'Female', value: 'female' },
-]
-    <Form.Select fluid label='Gender' options={options} placeholder='Gender' />
-    */
+import { Form, Message } from 'semantic-ui-react'
 
 export default class ActivityForm extends Component {
   constructor(props) {
@@ -25,7 +15,7 @@ export default class ActivityForm extends Component {
         content: '',
       },
       name: '',
-      key: '',
+      code: '',
     };
   }
 
@@ -42,7 +32,7 @@ export default class ActivityForm extends Component {
 
   handleSubmit = () => {
     this.clearStatus();
-    if(this.state.name == '') {
+    if(this.state.name === '') {
       this.setState({
         info: {
           header: 'Missing Name',
@@ -55,7 +45,7 @@ export default class ActivityForm extends Component {
       return
     }
 
-    if(this.state.key == '') {
+    if(this.state.code === '') {
       this.setState({
         info: {
           header: 'Missing Code',
@@ -68,7 +58,29 @@ export default class ActivityForm extends Component {
       return
     }
 
-    this.props.onSaveNewActivity(this.state.name, this.state.key)
+    this.props.newActivity({name: this.state.name, code: this.state.code})
+    .then(() =>{
+      this.setState({
+        info: {
+          header: 'Success',
+          content: 'Saved!',
+        },
+        name: '',
+        code: '',
+        formStatus: { success: true },
+        showMessage: true
+      })
+      setTimeout(this.clearStatus, 3000)
+    }).catch(err => {
+      this.setState({
+        info: {
+          header: 'Error',
+          content: err.message,
+        },
+        formStatus: { error: true },
+        showMessage: true
+      })
+    }); 
   }
 
   render() {
@@ -84,7 +96,7 @@ export default class ActivityForm extends Component {
         <Form.Input fluid label='Code'
         {...this.state.keyStatus} 
         onChange={this.handleChange}
-        value={this.state.key} name='key' placeholder='code' />
+        value={this.state.code} name='code' placeholder='code' />
 
       </Form.Group>
       {this.state.showMessage && (

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Button, Divider } from 'semantic-ui-react'
+import { Button } from 'semantic-ui-react'
 
 //TODO, can be improve: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-no-bind.md
 
@@ -22,10 +22,10 @@ export default class ButtonGroup extends Component {
   handleButtonClicked = (key) => {
     //make clicked button in primary style
 
-    var newStatus = (this.state.mode == BUTTON_GROUP_MODE_MULTI)? this.state.status:{};
+    var newStatus = (this.state.mode === BUTTON_GROUP_MODE_MULTI)? this.state.status:{};
 
     for(var st of this.state.options) {
-      if(st.key == key){
+      if(st.key === key){
         newStatus[st.key] = newStatus[st.key]? null:{primary: true}
         continue
       }
@@ -66,8 +66,6 @@ export default class ButtonGroup extends Component {
 
 function getSelectedKeys(options, status){
   return options.filter((opt) => {
-    if (status[opt.key]) {
-      return opt.key
-    }
+    return status[opt.key]
   })
 }

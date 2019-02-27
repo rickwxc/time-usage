@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import Admin from './admin/Admin';
 import DayGrid from './components/DayGrid';
 import { connect } from 'react-redux'
-import fetch_days_started, { saveNewActivity, loadActivities } from './actions';
+import fetch_days_started, { newActivity, loadActivities, updateEntity, deleteActivity } from './actions';
 import { Container, Grid } from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css';
 import "react-datepicker/dist/react-datepicker.css";
@@ -34,11 +34,15 @@ class App extends Component {
           <Grid.Column>
             <Admin 
             activities={this.props.activities} 
-            onSaveNewActivity={this.props.saveNewActivity}
+            newActivity={this.props.newActivity}
             loadActivities={this.props.loadActivities}
+            deleteActivity={this.props.deleteActivity}
+            updateEntity={this.props.updateEntity}
+            isLoading={this.props.isLoading}
             />
             <br /> <br /> <br /> <br />
             <br /> <br /> <br /> <br />
+
             <br /> <br /> <br /> <br />
           </Grid.Column>
 
@@ -59,7 +63,13 @@ function mapStateToProps(state) {
   }
 }
 
-const mapDispatchToProps = { fetch_days_started, saveNewActivity, loadActivities}
+const mapDispatchToProps = {
+  fetch_days_started,
+  newActivity,
+  deleteActivity,
+  updateEntity,
+  loadActivities,
+}
 
 export default connect(
   mapStateToProps, 

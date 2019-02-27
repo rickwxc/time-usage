@@ -57,11 +57,11 @@ export default class UsageForm extends Component {
       activity: sel
     })
 
-    activities.filter((act) =>{
-      if(act.key == sel.key){
+    for(var act of activities){
+      if(act.key === sel.key){
         this.setState(act.state)
       }
-    })
+    }
   }
 
   handleSubmit = () => {
