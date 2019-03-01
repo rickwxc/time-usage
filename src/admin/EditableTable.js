@@ -5,28 +5,29 @@ import { Table } from 'semantic-ui-react'
 
 export default class EditableTable extends Component { 
 
-    constructor(props) {
-      super(props)
-      this.state = {
-        isLoading: true,
-        err: null
-      }
+  constructor(props) {
+    super(props)
+    this.state = {
+      isLoading: false,
+      list: {},
+      err: null
+    }
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (this.props.list === nextProps.list){
+      return
     }
 
-    componentDidMount() {
-      this.props.loadList(this.props.resource)
-      .then((resp)=>{
-        this.setState({ isLoading: false })
-      }).catch((err)=>{
-        this.setState({
-          isLoading: false,
-          err: err.message
-        })
-      })
-    }
+    this.setState({
+      isLoading: false,
+      list: nextProps.list
+    })
+  }
 
   render() {
-    const { list, resource, fields } = this.props
+    const { resource, fields } = this.props
+    const { list } = this.state
     return (
       <div>
 

@@ -7,14 +7,21 @@ const SkillWrapper = (WrappedComponent) => {
       return (
         <WrappedComponent
           resource='skills'
+          fields = {[
+            {
+              name: 'name',
+              value: null
+            },
+            {
+              name: 'code',
+              value: null
+            }
+          ]}
 
           remove={this.props.deleteEntity}
-          fields={this.props.fields}
           update={this.props.updateEntity}
           create={this.props.newEntity}
-
           list={this.props.skills}
-          loadList={this.props.loadEntities}
         />
       );
     }

@@ -1,5 +1,9 @@
 const initialState = {
   activities: {},
+  funs: {},
+  sports: {},
+  sleep: {},
+  sicks: {},
   skills: {}
 };
 

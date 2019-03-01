@@ -19,45 +19,49 @@ export default class ButtonGroup extends Component {
     } 
   }
 
+  componentWillReceiveProps(nextProps){
+    if (this.props.options === nextProps.options){
+      return
+    }  
+
+    this.setState({
+      options: nextProps.options
+    })
+  }
+
   handleButtonClicked = (key) => {
     //make clicked button in primary style
 
     var newStatus = (this.state.mode === BUTTON_GROUP_MODE_MULTI)? this.state.status:{};
 
-    for(var st of this.state.options) {
-      if(st.key === key){
-        newStatus[st.key] = newStatus[st.key]? null:{primary: true}
-        continue
-      }
-    }
+    newStatus[key] = newStatus[key]? null:{primary: true}
 
     this.setState({
       status: newStatus
     })
 
-    //call parent handler function 
     this.props.handleButtonClicked(getSelectedKeys(this.state.options, newStatus))
   }
 
   render() {
 
+    const { options } = this.state
+    const { textField } = this.props
+
     return (
       <div>
-  <Button.Group>
 
-  {this.state.options.map(opt => (
+  {Object.keys(options).map(key => (
     <Button 
-    onClick={() => this.handleButtonClicked(opt.key)}
+    onClick={() => this.handleButtonClicked(key)}
 
-    {...this.state.status[opt.key]}
+    {...this.state.status[key]}
 
-
-    key={opt.key}
-    content={opt.text}
+    size={this.props.size}
+    key={key}
+    content={options[key][textField]}
     />
   ))}
-
-  </Button.Group>
 
       </div>
     )
@@ -65,7 +69,8 @@ export default class ButtonGroup extends Component {
 }
 
 function getSelectedKeys(options, status){
-  return options.filter((opt) => {
-    return status[opt.key]
+  return Object.keys(options).filter((key) => {
+    return status[key]
   })
+
 }

@@ -5,7 +5,7 @@ export function valueToSelectOption(ary){
     return {
       key: e,
       value: e,
-      text: e ==''? '-none-':e
+      text: e === ''? '-none-':e
     }
   })
 }
